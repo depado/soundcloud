@@ -4,7 +4,7 @@ import "fmt"
 
 const (
 	UserPath      = "/users/{userID}"
-	UserLikesPath = "/users/{userID}/track_likes"
+	UserLikesPath = UserPath + "/track_likes"
 )
 
 func (c *Client) User(id string) *UserService {

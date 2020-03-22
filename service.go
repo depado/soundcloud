@@ -10,8 +10,8 @@ import (
 
 type service struct {
 	client      *resty.Client
-	queryParams map[string]string
 	path        string
+	queryParams map[string]string
 	pathParams  map[string]string
 }
 
@@ -22,7 +22,7 @@ func (s service) Get(out interface{}) error {
 	}
 
 	if !resp.IsSuccess() {
-		return fmt.Errorf("status code %d", resp.StatusCode())
+		return fmt.Errorf("query endpoint %s: status code %d", s.path, resp.StatusCode())
 	}
 
 	if err = json.Unmarshal(resp.Body(), out); err != nil {

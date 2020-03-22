@@ -9,3 +9,6 @@
 [![Sourcegraph](https://sourcegraph.com/github.com/Depado/soundcloud/-/badge.svg)](https://sourcegraph.com/github.com/Depado/soundcloud?badge)
 
 Work in progress golang client for SoundCloud's v2 API
+
+## TODO
+
