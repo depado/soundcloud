@@ -51,12 +51,46 @@ type User struct {
 }
 
 type Track struct {
-	CommentCount int       `json:"comment_count"`
-	FullDuration int       `json:"full_duration"`
-	Downloadable bool      `json:"downloadable"`
-	CreatedAt    time.Time `json:"created_at"`
-	Description  string    `json:"description"`
-	Media        struct {
+	ArtworkURL       string      `json:"artwork_url,omitempty"`
+	Caption          interface{} `json:"caption,omitempty"`
+	Commentable      bool        `json:"commentable,omitempty"`
+	CommentCount     int         `json:"comment_count,omitempty"`
+	CreatedAt        time.Time   `json:"created_at,omitempty"`
+	Description      string      `json:"description,omitempty"`
+	Downloadable     bool        `json:"downloadable,omitempty"`
+	DownloadCount    int         `json:"download_count,omitempty"`
+	Duration         int         `json:"duration,omitempty"`
+	FullDuration     int         `json:"full_duration,omitempty"`
+	EmbeddableBy     string      `json:"embeddable_by,omitempty"`
+	Genre            string      `json:"genre,omitempty"`
+	HasDownloadsLeft bool        `json:"has_downloads_left,omitempty"`
+	ID               int         `json:"id"`
+	Kind             string      `json:"kind"`
+	LabelName        interface{} `json:"label_name,omitempty"`
+	LastModified     time.Time   `json:"last_modified,omitempty"`
+	License          string      `json:"license,omitempty"`
+	LikesCount       int         `json:"likes_count,omitempty"`
+	Permalink        string      `json:"permalink,omitempty"`
+	PermalinkURL     string      `json:"permalink_url,omitempty"`
+	PlaybackCount    int         `json:"playback_count,omitempty"`
+	Public           bool        `json:"public,omitempty"`
+	PurchaseTitle    string      `json:"purchase_title,omitempty"`
+	PurchaseURL      string      `json:"purchase_url,omitempty"`
+	ReleaseDate      time.Time   `json:"release_date,omitempty"`
+	RepostsCount     int         `json:"reposts_count,omitempty"`
+	SecretToken      interface{} `json:"secret_token,omitempty"`
+	Sharing          string      `json:"sharing,omitempty"`
+	State            string      `json:"state,omitempty"`
+	Streamable       bool        `json:"streamable,omitempty"`
+	TagList          string      `json:"tag_list,omitempty"`
+	Title            string      `json:"title,omitempty"`
+	URI              string      `json:"uri,omitempty"`
+	Urn              string      `json:"urn,omitempty"`
+	UserID           int         `json:"user_id,omitempty"`
+	Visuals          interface{} `json:"visuals,omitempty"`
+	WaveformURL      string      `json:"waveform_url,omitempty"`
+	DisplayDate      time.Time   `json:"display_date,omitempty"`
+	Media            struct {
 		Transcodings []struct {
 			URL      string `json:"url"`
 			Preset   string `json:"preset"`
@@ -68,49 +102,31 @@ type Track struct {
 			} `json:"format"`
 			Quality string `json:"quality"`
 		} `json:"transcodings"`
-	} `json:"media"`
-	Title             string `json:"title"`
-	PublisherMetadata struct {
-		Urn           string `json:"urn"`
-		ContainsMusic bool   `json:"contains_music"`
-		ID            int    `json:"id"`
-	} `json:"publisher_metadata"`
-	Duration          int         `json:"duration"`
-	HasDownloadsLeft  bool        `json:"has_downloads_left"`
-	ArtworkURL        string      `json:"artwork_url"`
-	Public            bool        `json:"public"`
-	Streamable        bool        `json:"streamable"`
-	TagList           string      `json:"tag_list"`
-	DownloadURL       interface{} `json:"download_url"`
-	Genre             string      `json:"genre"`
-	ID                int         `json:"id"`
-	RepostsCount      int         `json:"reposts_count"`
-	State             string      `json:"state"`
-	LabelName         interface{} `json:"label_name"`
-	LastModified      time.Time   `json:"last_modified"`
-	Commentable       bool        `json:"commentable"`
-	Policy            string      `json:"policy"`
-	Visuals           interface{} `json:"visuals"`
-	Kind              string      `json:"kind"`
-	PurchaseURL       interface{} `json:"purchase_url"`
-	Sharing           string      `json:"sharing"`
-	URI               string      `json:"uri"`
-	SecretToken       interface{} `json:"secret_token"`
-	DownloadCount     int         `json:"download_count"`
-	LikesCount        int         `json:"likes_count"`
-	Urn               string      `json:"urn"`
-	License           string      `json:"license"`
-	PurchaseTitle     interface{} `json:"purchase_title"`
-	DisplayDate       time.Time   `json:"display_date"`
-	EmbeddableBy      string      `json:"embeddable_by"`
-	ReleaseDate       interface{} `json:"release_date"`
-	UserID            int         `json:"user_id"`
-	MonetizationModel string      `json:"monetization_model"`
-	WaveformURL       string      `json:"waveform_url"`
-	Permalink         string      `json:"permalink"`
-	PermalinkURL      string      `json:"permalink_url"`
-	User              User        `json:"user"`
-	PlaybackCount     int         `json:"playback_count"`
+	} `json:"media,omitempty"`
+	MonetizationModel string `json:"monetization_model"`
+	Policy            string `json:"policy"`
+	User              struct {
+		AvatarURL    string      `json:"avatar_url"`
+		FirstName    string      `json:"first_name"`
+		FullName     string      `json:"full_name"`
+		ID           int         `json:"id"`
+		Kind         string      `json:"kind"`
+		LastModified time.Time   `json:"last_modified"`
+		LastName     string      `json:"last_name"`
+		Permalink    string      `json:"permalink"`
+		PermalinkURL string      `json:"permalink_url"`
+		URI          string      `json:"uri"`
+		Urn          string      `json:"urn"`
+		Username     string      `json:"username"`
+		Verified     bool        `json:"verified"`
+		City         string      `json:"city"`
+		CountryCode  interface{} `json:"country_code"`
+		Badges       struct {
+			ProUnlimited bool `json:"pro_unlimited"`
+			Verified     bool `json:"verified"`
+		} `json:"badges"`
+	} `json:"user,omitempty"`
+	PublisherMetadata PublisherMetadata `json:"publisher_metadata,omitempty"`
 }
 
 type Tracks []Track
@@ -122,29 +138,59 @@ type PlaylistsLikedOwned struct {
 }
 
 type Playlist struct {
-	ManagedByFeeds bool        `json:"managed_by_feeds"`
-	Kind           string      `json:"kind"`
-	SetType        string      `json:"set_type"`
-	CreatedAt      time.Time   `json:"created_at"`
-	Sharing        string      `json:"sharing"`
-	Title          string      `json:"title"`
-	TrackCount     int         `json:"track_count"`
-	URI            string      `json:"uri"`
-	SecretToken    interface{} `json:"secret_token"`
-	Duration       int         `json:"duration"`
-	LikesCount     int         `json:"likes_count"`
 	ArtworkURL     string      `json:"artwork_url"`
-	Public         bool        `json:"public"`
-	DisplayDate    time.Time   `json:"display_date"`
-	UserID         int         `json:"user_id"`
-	IsAlbum        bool        `json:"is_album"`
+	CreatedAt      time.Time   `json:"created_at"`
+	Description    interface{} `json:"description"`
+	Duration       int         `json:"duration"`
+	EmbeddableBy   string      `json:"embeddable_by"`
+	Genre          string      `json:"genre"`
 	ID             int         `json:"id"`
-	RepostsCount   int         `json:"reposts_count"`
+	Kind           string      `json:"kind"`
+	LabelName      interface{} `json:"label_name"`
+	LastModified   time.Time   `json:"last_modified"`
+	License        string      `json:"license"`
+	LikesCount     int         `json:"likes_count"`
+	ManagedByFeeds bool        `json:"managed_by_feeds"`
 	Permalink      string      `json:"permalink"`
 	PermalinkURL   string      `json:"permalink_url"`
+	Public         bool        `json:"public"`
+	PurchaseTitle  interface{} `json:"purchase_title"`
+	PurchaseURL    interface{} `json:"purchase_url"`
+	ReleaseDate    interface{} `json:"release_date"`
+	RepostsCount   int         `json:"reposts_count"`
+	SecretToken    interface{} `json:"secret_token"`
+	Sharing        string      `json:"sharing"`
+	TagList        string      `json:"tag_list"`
+	Title          string      `json:"title"`
+	URI            string      `json:"uri"`
+	UserID         int         `json:"user_id"`
+	SetType        string      `json:"set_type"`
+	IsAlbum        bool        `json:"is_album"`
 	PublishedAt    time.Time   `json:"published_at"`
-	LastModified   time.Time   `json:"last_modified"`
-	User           User        `json:"user"`
+	DisplayDate    time.Time   `json:"display_date"`
+	User           struct {
+		AvatarURL    string      `json:"avatar_url"`
+		FirstName    string      `json:"first_name"`
+		FullName     string      `json:"full_name"`
+		ID           int         `json:"id"`
+		Kind         string      `json:"kind"`
+		LastModified time.Time   `json:"last_modified"`
+		LastName     string      `json:"last_name"`
+		Permalink    string      `json:"permalink"`
+		PermalinkURL string      `json:"permalink_url"`
+		URI          string      `json:"uri"`
+		Urn          string      `json:"urn"`
+		Username     string      `json:"username"`
+		Verified     bool        `json:"verified"`
+		City         interface{} `json:"city"`
+		CountryCode  interface{} `json:"country_code"`
+		Badges       struct {
+			ProUnlimited bool `json:"pro_unlimited"`
+			Verified     bool `json:"verified"`
+		} `json:"badges"`
+	} `json:"user"`
+	Tracks     Tracks `json:"tracks"`
+	TrackCount int    `json:"track_count"`
 }
 
 type Collection struct {
@@ -187,6 +233,11 @@ type Media struct {
 	Transcodings []Transcodings `json:"transcodings"`
 }
 type PublisherMetadata struct {
-	Urn string `json:"urn"`
-	ID  int    `json:"id"`
+	ID             int    `json:"id"`
+	Urn            string `json:"urn"`
+	Artist         string `json:"artist"`
+	ContainsMusic  bool   `json:"contains_music"`
+	Publisher      string `json:"publisher"`
+	Isrc           string `json:"isrc"`
+	WriterComposer string `json:"writer_composer"`
 }
