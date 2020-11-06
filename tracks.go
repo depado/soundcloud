@@ -1,10 +1,14 @@
 package soundcloud
 
 import (
+	"encoding/json"
 	"fmt"
 	"io/ioutil"
 	"net/http"
 	"regexp"
+	"strconv"
+
+	"github.com/go-resty/resty/v2"
 )
 
 const (
@@ -27,6 +31,7 @@ type TrackService struct {
 	service
 	clientID string
 	trackID  string
+	current  *Track
 }
 
 func (ts *TrackService) WithID(id string) *TrackService {
@@ -36,33 +41,44 @@ func (ts *TrackService) WithID(id string) *TrackService {
 	return ts
 }
 
-func (ts *TrackService) FromURL(url string) (*TrackService, error) {
+func (ts *TrackService) FromTrack(t *Track, fetch bool) (*TrackService, *Track, error) {
+	ts.trackID = strconv.Itoa(t.ID)
+	ts.current = t
+	if !fetch {
+		return ts, t, nil
+	}
+	t, err := ts.get()
+	return ts, t, err
+}
+
+func (ts *TrackService) FromURL(url string) (*TrackService, *Track, error) {
 	resp, err := http.Get(url)
 	if err != nil {
-		return nil, fmt.Errorf("unable to fetch page: %w", err)
+		return nil, nil, fmt.Errorf("unable to fetch page: %w", err)
 	}
 	defer resp.Body.Close()
 
 	if resp.StatusCode != http.StatusOK {
-		return nil, fmt.Errorf("unexpected return status: %d", resp.StatusCode)
+		return nil, nil, fmt.Errorf("unexpected return status: %d", resp.StatusCode)
 	}
 
 	o, err := ioutil.ReadAll(resp.Body)
 	if err != nil {
-		return nil, fmt.Errorf("unable to read body: %w", err)
+		return nil, nil, fmt.Errorf("unable to read body: %w", err)
 	}
 	out := trackIDRegex.FindSubmatch(o)
 	if len(out) != 2 {
-		return nil, fmt.Errorf("no match was found")
+		return nil, nil, fmt.Errorf("no match was found")
 	}
 	id := string(out[1])
 
 	ts.service.queryParams = map[string]string{"ids": id}
 	ts.trackID = id
-	return ts, nil
+	t, err := ts.get()
+	return ts, t, err
 }
 
-func (ts *TrackService) Get() (*Track, error) {
+func (ts *TrackService) get() (*Track, error) {
 	if ts.trackID == "" {
 		return nil, fmt.Errorf("get track: no track ID or URL was provided")
 	}
@@ -76,17 +92,41 @@ func (ts *TrackService) Get() (*Track, error) {
 		return nil, fmt.Errorf("get track %s: array of size 0", ts.trackID)
 	}
 
-	return &tracks[0], nil
+	ts.current = &tracks[0]
+
+	return ts.current, nil
 }
 
-// Ongoing
-func (ts *TrackService) StreamURL() (string, error) {
-	t, err := ts.Get()
+func (ts *TrackService) Stream(st StreamType) (string, error) {
+	if ts.current == nil || len(ts.current.Media.Transcodings) == 0 {
+		return "", fmt.Errorf("no track assigned or no transcoding found")
+	}
+
+	var furl string
+	for _, tc := range ts.current.Media.Transcodings {
+		if tc.Preset == st.Preset && tc.Format.Protocol == st.Protocol {
+			furl = tc.URL
+			break
+		}
+	}
+	if furl == "" {
+		return "", fmt.Errorf("no matching stream type found")
+	}
+
+	resp, err := resty.New().SetQueryParam("client_id", ts.clientID).R().Get(furl)
 	if err != nil {
-		return "", fmt.Errorf("get stream URL: %w", err)
+		return "", fmt.Errorf("query endpoint %s: %w", furl, err)
 	}
-	for _, tc := range t.Media.Transcodings {
-		fmt.Println(tc.URL + "?client_id=" + ts.clientID)
+
+	if !resp.IsSuccess() {
+		return "", fmt.Errorf("query endpoint %s: status code %d", furl, resp.StatusCode())
 	}
-	return "", nil
+	out := struct {
+		URL string `json:"url"`
+	}{}
+	if err = json.Unmarshal(resp.Body(), &out); err != nil {
+		return "", fmt.Errorf("unmarshal: %w", err)
+	}
+
+	return out.URL, nil
 }
