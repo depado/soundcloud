@@ -98,15 +98,26 @@ func (ps *PlaylistService) Get() (*Playlist, error) {
 		}
 	}
 
-	ps.extra.queryParams = map[string]string{"ids": strings.Join(ids, ",")}
-	tr := &Tracks{}
-	if err := ps.extra.Get(tr); err != nil {
-		return pl, fmt.Errorf("get playlist %s: %w", ps.playlistID, err)
+	chunks := [][]string{}
+	chunkSize := 15
+	for i := 0; i < len(ids); i += chunkSize {
+		end := i + chunkSize
+		if end > len(ids) {
+			end = len(ids)
+		}
+		chunks = append(chunks, ids[i:end])
 	}
 
 	pl.Tracks = Tracks{}
 	pl.Tracks = append(pl.Tracks, tracks...)
-	pl.Tracks = append(pl.Tracks, *tr...)
+	for _, c := range chunks {
+		ps.extra.queryParams = map[string]string{"ids": strings.Join(c, ",")}
+		tr := &Tracks{}
+		if err := ps.extra.Get(tr); err != nil {
+			return pl, fmt.Errorf("get playlist %s: %w", ps.playlistID, err)
+		}
+		pl.Tracks = append(pl.Tracks, *tr...)
+	}
 
 	return pl, nil
 }
