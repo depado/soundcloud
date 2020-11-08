@@ -94,6 +94,7 @@ func (ps *PlaylistService) Get() (*Playlist, error) {
 		if t.PermalinkURL == "" {
 			ids = append(ids, strconv.Itoa(t.ID))
 		} else {
+			t.Playlist = pl
 			tracks = append(tracks, t)
 		}
 	}
@@ -116,7 +117,10 @@ func (ps *PlaylistService) Get() (*Playlist, error) {
 		if err := ps.extra.Get(tr); err != nil {
 			return pl, fmt.Errorf("get playlist %s: %w", ps.playlistID, err)
 		}
-		pl.Tracks = append(pl.Tracks, *tr...)
+		for _, t := range *tr {
+			t.Playlist = pl
+			pl.Tracks = append(pl.Tracks, t)
+		}
 	}
 
 	return pl, nil

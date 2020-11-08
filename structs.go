@@ -51,6 +51,7 @@ type User struct {
 }
 
 type Track struct {
+	Playlist         *Playlist
 	ArtworkURL       string      `json:"artwork_url,omitempty"`
 	Caption          interface{} `json:"caption,omitempty"`
 	Commentable      bool        `json:"commentable,omitempty"`
