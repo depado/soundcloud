@@ -16,5 +16,4 @@ test: ## Run the test suite
 
 .PHONY: clean
 clean: ## Remove the binary
-	if [ -f $(BINARY) ] ; then rm $(BINARY) ; fi
 	if [ -f coverage.txt ] ; then rm coverage.txt ; fi

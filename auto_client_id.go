@@ -57,6 +57,8 @@ func extractScripts(r io.Reader) []string {
 	return scripts
 }
 
+// NewClientIDFromPublicHTML allow to retrieve a token from the public page
+// of SoundCloud.
 func NewClientIDFromPublicHTML() (string, error) {
 	var token string
 	scripts, err := find()
