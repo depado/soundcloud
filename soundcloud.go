@@ -14,7 +14,7 @@ type Client struct {
 // NewClient will create a new SoundCloud client with the specified client ID
 func NewClient(clientID string) *Client {
 	return &Client{
-		c:        resty.New().SetHostURL(base).SetQueryParam("client_id", clientID),
+		c:        resty.New().SetBaseURL(base).SetQueryParam("client_id", clientID),
 		clientID: clientID,
 	}
 }
@@ -27,7 +27,7 @@ func NewAutoIDClient() (*Client, error) {
 		return nil, err
 	}
 	return &Client{
-		c:        resty.New().SetHostURL(base).SetQueryParam("client_id", t),
+		c:        resty.New().SetBaseURL(base).SetQueryParam("client_id", t),
 		clientID: t,
 	}, nil
 }

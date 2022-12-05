@@ -3,7 +3,7 @@ package soundcloud
 import (
 	"encoding/json"
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -62,7 +62,7 @@ func (ts *TrackService) FromURL(url string) (*TrackService, *Track, error) {
 		return nil, nil, fmt.Errorf("unexpected return status: %d", resp.StatusCode)
 	}
 
-	o, err := ioutil.ReadAll(resp.Body)
+	o, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, nil, fmt.Errorf("unable to read body: %w", err)
 	}

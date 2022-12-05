@@ -2,7 +2,7 @@ package soundcloud
 
 import (
 	"fmt"
-	"io/ioutil"
+	"io"
 	"net/http"
 	"regexp"
 	"strconv"
@@ -59,7 +59,7 @@ func (ps *PlaylistService) FromURL(url string) (*PlaylistService, error) {
 		return nil, fmt.Errorf("unexpected return status: %d", resp.StatusCode)
 	}
 
-	o, err := ioutil.ReadAll(resp.Body)
+	o, err := io.ReadAll(resp.Body)
 	if err != nil {
 		return nil, fmt.Errorf("unable to read body: %w", err)
 	}
