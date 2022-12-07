@@ -1,12 +1,12 @@
 package soundcloud
 
 type StreamType struct {
-	Protocol string
-	Preset   string
+	Protocol     string
+	PresetPrefix string
 }
 
 var (
-	HLSMP3         = StreamType{Protocol: "hls", Preset: "mp3_1_0"}
-	ProgressiveMP3 = StreamType{Protocol: "progressive", Preset: "mp3_1_0"}
-	Opus           = StreamType{Protocol: "hls", Preset: "opus_0_0"}
+	HLSMP3         = StreamType{Protocol: "hls", PresetPrefix: "mp3"}
+	ProgressiveMP3 = StreamType{Protocol: "progressive", PresetPrefix: "mp3"}
+	Opus           = StreamType{Protocol: "hls", PresetPrefix: "opus"}
 )

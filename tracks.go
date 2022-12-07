@@ -7,6 +7,7 @@ import (
 	"net/http"
 	"regexp"
 	"strconv"
+	"strings"
 
 	"github.com/go-resty/resty/v2"
 )
@@ -104,7 +105,7 @@ func (ts *TrackService) Stream(st StreamType) (string, error) {
 
 	var furl string
 	for _, tc := range ts.current.Media.Transcodings {
-		if tc.Preset == st.Preset && tc.Format.Protocol == st.Protocol {
+		if strings.HasPrefix(tc.Preset, st.PresetPrefix) && tc.Format.Protocol == st.Protocol {
 			furl = tc.URL
 			break
 		}
