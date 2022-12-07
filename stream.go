@@ -6,7 +6,7 @@ type StreamType struct {
 }
 
 var (
-	HLSMP3         = StreamType{Protocol: "hls", Preset: "mp3_0_0"}
-	ProgressiveMP3 = StreamType{Protocol: "progressive", Preset: "mp3_0_0"}
+	HLSMP3         = StreamType{Protocol: "hls", Preset: "mp3_1_0"}
+	ProgressiveMP3 = StreamType{Protocol: "progressive", Preset: "mp3_1_0"}
 	Opus           = StreamType{Protocol: "hls", Preset: "opus_0_0"}
 )
