@@ -9,7 +9,7 @@ steps:
       - git fetch --tags
 
   - name: build
-    image: golang:1.20
+    image: golang:1.21
     volumes:
       - name: deps
         path: /go
@@ -17,7 +17,7 @@ steps:
       - make test
 
   - name: linter
-    image: golang:1.20
+    image: golang:1.21
     volumes:
       - name: deps
         path: /go
