@@ -6,7 +6,7 @@ require (
 	github.com/go-resty/resty/v2 v2.9.1
 	github.com/jarcoal/httpmock v1.3.1
 	github.com/stretchr/testify v1.8.4
-	golang.org/x/net v0.15.0
+	golang.org/x/net v0.16.0
 )
 
 require (
