@@ -3,7 +3,7 @@ module github.com/Depado/soundcloud
 go 1.20
 
 require (
-	github.com/go-resty/resty/v2 v2.10.0
+	github.com/go-resty/resty/v2 v2.11.0
 	github.com/jarcoal/httpmock v1.3.1
 	github.com/stretchr/testify v1.8.4
 	golang.org/x/net v0.19.0
