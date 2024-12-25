@@ -1,29 +1,12 @@
-name: Test and lint
-on:
-  workflow_dispatch:
-  push:
-    branches: ["main"]
-    tags: ["v*"]
-  pull_request:
-    branches: ["main"]
+name: golang
 
-permissions:
-  contents: read
-  packages: write
+on:
+  pull_request:
+  push:
+    branches: [main]
 
 jobs:
-  build:
-    name: Build
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
-      - uses: oven-sh/setup-bun@4bc047ad259df6fc24a6c9b0f9a0cb08cf17fbe5 # v2
-      - uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5
-      - run: go build
-
-  coverage:
-    name: Test and cover
-    needs: build
+  test:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -33,15 +16,15 @@ jobs:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
         with:
           fetch-depth: 10
+      - uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5
+        with:
+          go-version-file: "go.mod"
       - uses: gwatts/go-coverage-action@2845595538a59d63d1bf55f109c14e104c6f7cb3 # v2
-        id: coverage
         with:
           fail-coverage: never
           cover-pkg: ./...
 
   golangci:
-    name: Lint
-    needs: build
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -50,6 +33,8 @@ jobs:
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4
       - uses: actions/setup-go@3041bf56c941b39c61721a86cd11f3bb1338122a # v5
+        with:
+          go-version-file: "go.mod"
       - name: golangci-lint
         uses: golangci/golangci-lint-action@971e284b6050e8a5849b72094c50ab08da042db8 # v6
         with:
