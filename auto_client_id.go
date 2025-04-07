@@ -32,7 +32,7 @@ func find() ([]string, error) {
 	if err != nil {
 		return nil, fmt.Errorf("find: %w", err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	return extractScripts(resp.Body), nil
 }
@@ -76,7 +76,7 @@ func NewClientIDFromPublicHTML() (string, error) {
 				e <- err
 				return
 			}
-			defer resp.Body.Close()
+			defer resp.Body.Close() //nolint:errcheck
 			body, err := io.ReadAll(resp.Body)
 			if err != nil {
 				e <- err

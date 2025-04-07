@@ -43,7 +43,7 @@ func (us *UserService) Offset(offset int) *UserService {
 }
 
 func (us *UserService) Likes() (Tracks, error) {
-	us.service.path = UserLikesPath
+	us.path = UserLikesPath
 	collection := &CollectionQuery{}
 
 	if err := us.service.Get(collection); err != nil {

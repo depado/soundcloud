@@ -36,7 +36,7 @@ type TrackService struct {
 }
 
 func (ts *TrackService) WithID(id string) *TrackService {
-	ts.service.queryParams = map[string]string{"ids": id}
+	ts.queryParams = map[string]string{"ids": id}
 	ts.trackID = id
 
 	return ts
@@ -57,7 +57,7 @@ func (ts *TrackService) FromURL(url string) (*TrackService, *Track, error) {
 	if err != nil {
 		return nil, nil, fmt.Errorf("unable to fetch page: %w", err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, nil, fmt.Errorf("unexpected return status: %d", resp.StatusCode)
@@ -73,7 +73,7 @@ func (ts *TrackService) FromURL(url string) (*TrackService, *Track, error) {
 	}
 	id := string(out[1])
 
-	ts.service.queryParams = map[string]string{"ids": id}
+	ts.queryParams = map[string]string{"ids": id}
 	ts.trackID = id
 	t, err := ts.get()
 	return ts, t, err
@@ -85,7 +85,7 @@ func (ts *TrackService) get() (*Track, error) {
 	}
 
 	tracks := Tracks{}
-	if err := ts.service.Get(&tracks); err != nil {
+	if err := ts.Get(&tracks); err != nil {
 		return nil, fmt.Errorf("get track %s: %w", ts.trackID, err)
 	}
 

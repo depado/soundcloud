@@ -39,7 +39,7 @@ type PlaylistService struct {
 
 // WithID will set the current playlist ID to the given value
 func (ps *PlaylistService) WithID(id string) *PlaylistService {
-	ps.service.pathParams = map[string]string{"playlistID": id}
+	ps.pathParams = map[string]string{"playlistID": id}
 	ps.playlistID = id
 	return ps
 }
@@ -53,7 +53,7 @@ func (ps *PlaylistService) FromURL(url string) (*PlaylistService, error) {
 	if err != nil {
 		return nil, fmt.Errorf("unable to fetch page: %w", err)
 	}
-	defer resp.Body.Close()
+	defer resp.Body.Close() //nolint:errcheck
 
 	if resp.StatusCode != http.StatusOK {
 		return nil, fmt.Errorf("unexpected return status: %d", resp.StatusCode)
@@ -69,7 +69,7 @@ func (ps *PlaylistService) FromURL(url string) (*PlaylistService, error) {
 	}
 	id := string(out[1])
 
-	ps.service.pathParams = map[string]string{"playlistID": id}
+	ps.pathParams = map[string]string{"playlistID": id}
 	ps.playlistID = id
 	return ps, nil
 }
