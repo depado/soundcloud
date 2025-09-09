@@ -1,6 +1,6 @@
 module github.com/Depado/soundcloud
 
-go 1.23.0
+go 1.24.0
 
 toolchain go1.25.1
 
@@ -8,7 +8,7 @@ require (
 	github.com/go-resty/resty/v2 v2.16.5
 	github.com/jarcoal/httpmock v1.4.1
 	github.com/stretchr/testify v1.11.1
-	golang.org/x/net v0.43.0
+	golang.org/x/net v0.44.0
 )
 
 require (
